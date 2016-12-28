@@ -10,6 +10,7 @@
 -v /var/run:/var/run \
 -v /var/lib/kubelet:/var/lib/kubelet \
 --memory={{ kubelet_memory_limit|regex_replace('Mi', 'M') }} --cpu-shares={{ kubelet_cpu_limit|regex_replace('m', '')  }} \
+-u root:{{ kubelet_group_id }} --group-add {{ etcd_cert_group_id }} --group-add {{ kube_cert_group_id }} \
 {{ hyperkube_image_repo }}:{{ hyperkube_image_tag}} \
 nsenter --target=1 --mount --wd=. -- \
 ./hyperkube kubelet \

@@ -13,6 +13,9 @@ Restart=on-failure
 RestartSec=10s
 TimeoutStartSec=0
 LimitNOFILE=40000
+User=root
+Group={{ kubelet_group_id }}
+SupplementaryGroups={{ etcd_cert_group_id }},{{ kube_cert_group_id }}
 
 ExecStartPre=-/usr/bin/rkt rm --uuid-file=/var/run/kubelet.uuid
 ExecStartPre=-/bin/mkdir -p /var/lib/kubelet
@@ -26,7 +29,7 @@ ExecStart=/usr/bin/rkt run \
         --volume etc-ssl-certs,kind=host,source=/etc/ssl/certs,readOnly=true \
         --volume usr-share-certs,kind=host,source=/usr/share/ca-certificates,readOnly=true \
         --volume var-lib-docker,kind=host,source={{ docker_daemon_graph }},readOnly=false \
-	--volume var-lib-kubelet,kind=host,source=/var/lib/kubelet,readOnly=false \
+        --volume var-lib-kubelet,kind=host,source=/var/lib/kubelet,readOnly=false \
         --volume run,kind=host,source=/run,readOnly=false \
         --mount volume=var-log,target=/var/log \
         --mount volume=dns,target=/etc/resolv.conf \
@@ -38,6 +41,7 @@ ExecStart=/usr/bin/rkt run \
         --mount volume=run,target=/run \
         --stage1-from-dir=stage1-fly.aci \
         {{ hyperkube_image_repo }}:{{ hyperkube_image_tag }} \
+        --memory={{ kubelet_memory_limit }} --cpu={{ kubelet_cpu_limit }} \
         --uuid-file-save=/var/run/kubelet.uuid \
         --debug --exec=/kubelet -- \
                 $KUBE_LOGTOSTDERR \
