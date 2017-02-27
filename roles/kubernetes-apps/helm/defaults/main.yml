@@ -1,0 +1,4 @@
+---
+socat_mode: 0700
+socat_owner: kube
+socat_dest: {{ bin_dir }}

@@ -17,3 +17,4 @@ dependencies:
   - role: kubernetes-apps/efk
     when: efk_enabled
     tags: [ apps, efk ]
+  - {role: kubernetes-apps/helm, tags: [apps, helm]}

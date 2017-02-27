@@ -1,3 +1,9 @@
 ---
-- debug:
-    msg: "No helm charts"
+- name: "Helm | Copy socat binary to {{ kube_binaries_dir }}"
+  copy:
+      src: "{{ role_path }}/files/socat"
+      dest: "{{ socat_dest }}"
+      owner: {{ socat_owner }}
+      mode:  {{ socat_mode }}
+  when: ansible_os_family == "Container Linux by CoreOS" and
+        kubelet_deployment_type == "docker"

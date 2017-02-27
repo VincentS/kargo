@@ -23,6 +23,9 @@
   -v /var/lib/kubelet:/var/lib/kubelet:shared \
   -v /var/run:/var/run:rw \
   -v {{kube_config_dir}}:{{kube_config_dir}}:ro \
+ {% if ansible_os_family == "Container Linux by CoreOS" and kubelet_deployment_type == "docker" %}
+  -e PATH="$PATH:{{ socat_dest }}" \
+ {% endif %}
   {{ hyperkube_image_repo }}:{{ hyperkube_image_tag}} \
   ./hyperkube kubelet \
   "$@"
