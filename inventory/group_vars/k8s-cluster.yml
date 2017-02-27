@@ -54,6 +54,11 @@ kube_users:
     pass: "{{kube_api_pwd}}"
     role: admin
 
+## It is possible to deactivate selected authentication methods (basic auth,x509,token)
+#kube_x509_auth: false
+#kube_basic_auth: false
+#kube_token_auth: false
+
 # Choose network plugin (calico, weave or flannel)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
 kube_network_plugin: calico
